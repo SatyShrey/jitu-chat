@@ -80,6 +80,15 @@ const chats = () => {
         }, 200)
     }, [])
 
+    useEffect(() => {
+        const asyncFunction = async () => {
+            const newChats: Chat[] = chats.map((item) => item.sender == email ? ({ ...item, status: "read" }) : item);
+            await AsyncStorage.setItem('chats', JSON.stringify(newChats))
+            setchats(newChats)
+        }
+        asyncFunction();
+    }, [])
+
     if (!email) { return <Redirect href='/' /> }
 
     const renderItem = ({ item, index }: { item: Chat, index: number }) => {
@@ -120,10 +129,11 @@ const chats = () => {
                         <Text style={{ color: status() ? "#0cc53e" : "#e73030" }}>{status() ? 'online' : 'offline'}</Text>
                     </View>
                     <TouchableOpacity>
-                        <MaterialIcons name="video-call" size={30}/>
+                        <MaterialIcons name="video-call" size={30} />
                     </TouchableOpacity>
                 </View>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     ref={flatRef}
                     style={styles.messagesContainer}
                     data={getMessages}
@@ -213,6 +223,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 12,
         paddingVertical: 5,
-        fontSize:18
+        fontSize: 18
     }
 })

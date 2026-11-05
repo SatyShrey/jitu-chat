@@ -2,10 +2,16 @@ import { Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 
 import Protected from '@/components/Protected'
 import { useApp } from '@/global';
 import { router } from 'expo-router';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const App = () => {
-  const { user, users } = useApp();
+  const { user, users, chats } = useApp();
+
+  const unreadCount = (email: string | undefined) => {
+    if (!email) return 0;
+    const unreadChats = chats.filter(f => (f.receiver == user?.email && f.sender == email && f.status != "read"));
+    return unreadChats.length
+  }
 
   return (
     <Protected>
@@ -25,7 +31,9 @@ const App = () => {
                 <View style={styles.userPic} >
                   <MaterialIcons name='person' size={30} />
                 </View>
-                <Text></Text>
+                <View style={unreadCount(u?.email) > 0 ? styles.unread : { display: "none" }}>
+                  <Text style={styles.unreadText}>{unreadCount(u?.email)}</Text>
+                </View>
                 <Text style={styles.name}>{u?.name}</Text>
               </TouchableOpacity>
             ))
@@ -85,5 +93,20 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
+  },
+  unread: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    backgroundColor: "#df1d1d",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  unreadText: {
+    color: "#fff",
+    fontSize: 12,
   }
 })
