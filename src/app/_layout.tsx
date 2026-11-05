@@ -5,7 +5,7 @@ import { MyProvider } from '@/global';
 const Layout = () => {
   return (
     <MyProvider>
-      <Stack  screenOptions={{headerShown:false}} />
+      <Stack />
     </MyProvider>
   )
 }
