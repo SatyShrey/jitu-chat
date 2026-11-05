@@ -38,9 +38,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [onlineUsers, setonlineUsers] = useState<string[]>([]);
     const [token, settoken] = useState('');
     const [lastTimeStamp, setlastTimeStamp] = useState('');
-    const offlineUrl = 'http://localhost:5000';
-    const onlineUrl = 'https://chat-app-backend-wnsf.onrender.com';
-    const url=onlineUrl
+    const url = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
 
     const asyncFunction = async () => {
         const userString = await AsyncStorage.getItem('user');
