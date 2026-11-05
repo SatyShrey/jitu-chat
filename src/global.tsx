@@ -38,7 +38,9 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [onlineUsers, setonlineUsers] = useState<string[]>([]);
     const [token, settoken] = useState('');
     const [lastTimeStamp, setlastTimeStamp] = useState('');
-    const url = 'http://localhost:5000';
+    const offlineUrl = 'http://localhost:5000';
+    const onlineUrl = 'https://chat-app-backend-wnsf.onrender.com';
+    const url=onlineUrl
 
     const asyncFunction = async () => {
         const userString = await AsyncStorage.getItem('user');
@@ -132,7 +134,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <MyContexts.Provider value={{
-            user, setloading, setuser, url, users, chats, setchats, token, settoken, lastTimeStamp, socket,onlineUsers
+            user, setloading, setuser, url, users, chats, setchats, token, settoken, lastTimeStamp, socket, onlineUsers
         }}>
             {children} {loading && <Loader />}
         </MyContexts.Provider>
