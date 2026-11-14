@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius:5,
         backgroundColor:"#fff",
         width:400,
-        maxHeight:"90%"
+        maxWidth:"90%",
     },
     title: {
         fontSize:18,

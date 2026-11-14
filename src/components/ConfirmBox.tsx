@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#00000070"
+        backgroundColor: "#00000070",
     },
     card: {
         padding: 10,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: "#fff",
         width: 400,
-        maxHeight: "90%"
+        maxWidth: "90%",
     },
     title: {
         fontSize: 18,

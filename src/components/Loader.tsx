@@ -3,10 +3,12 @@ import React from 'react'
 
 const Loader = () => {
     return (
-        <Modal>
+        <Modal transparent>
             <View style={styles.container}>
-                <ActivityIndicator />
-                <Text>Loading...</Text>
+                <View>
+                    <ActivityIndicator />
+                    <Text>Loading...</Text>
+                </View>
             </View>
         </Modal>
     )
@@ -19,5 +21,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#00000070"
+    },
+    card: {
+        flexDirection: "row",
+        padding: 10,
+        gap: 5,
+        borderRadius: 5,
+        backgroundColor: "#fff",
     }
 })
