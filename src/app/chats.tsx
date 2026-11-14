@@ -11,7 +11,7 @@ const chats = () => {
     const [text, settext] = useState('');
     const { email } = useLocalSearchParams();
     const flatRef = useRef<FlatList>(null);
-    const { users, user, token, setchats, chats, url, lastTimeStamp, socket, onlineUsers } = useApp();
+    const { users, user, token, setchats, chats, url, socket, onlineUsers } = useApp();
 
     function getName() {
         if (!email) return ''
@@ -72,7 +72,7 @@ const chats = () => {
             status: 'read'
         }
         socket.current?.emit('read', messages)
-    }, [lastTimeStamp]);
+    }, []);
 
     useEffect(() => {
         setTimeout(() => {

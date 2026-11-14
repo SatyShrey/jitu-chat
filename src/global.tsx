@@ -3,6 +3,7 @@ import Loader from "./components/Loader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io, type Socket } from 'socket.io-client';
 import axios from "axios";
+import { useLocalSearchParams } from "expo-router";
 
 type User = { name: string, email: string } | null;
 export type Chat = {
@@ -22,12 +23,12 @@ type ContextValue = {
     setchats: Dispatch<SetStateAction<Chat[]>>,
     token: string,
     settoken: Dispatch<SetStateAction<string>>,
-    lastTimeStamp: string,
     socket: RefObject<Socket | null>,
     onlineUsers: string[],
 }
 
 const MyContexts = createContext<ContextValue | null>(null);
+
 export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [user, setuser] = useState<User | null>(null);
     const [loading, setloading] = useState(false);
@@ -37,8 +38,8 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [chats, setchats] = useState<Chat[]>([]);
     const [onlineUsers, setonlineUsers] = useState<string[]>([]);
     const [token, settoken] = useState('');
-    const [lastTimeStamp, setlastTimeStamp] = useState('');
     const url = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+    const { email } = useLocalSearchParams();
 
     const asyncFunction = async () => {
         const userString = await AsyncStorage.getItem('user');
@@ -53,6 +54,14 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         asyncFunction();
     }, []);
+
+    useEffect(() => {
+        if (email) {
+            AsyncStorage.setItem('receiver-id', `${email}`)
+        } else {
+            AsyncStorage.removeItem('receiver-id');
+        }
+    }, [email]);
 
     const asyncFunction2 = async () => {
         const chatsString = await AsyncStorage.getItem('chats');
@@ -72,11 +81,16 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
         socket.current.on('new-chat', async (message: Chat) => {
             const existingData = await AsyncStorage.getItem('chats');
             let array = existingData != null ? JSON.parse(existingData) : [];
-            array.push(message);
+            const receiverId = await AsyncStorage.getItem('receiver-id');
+            const newMessage: Chat = (receiverId && receiverId == message.sender) ? { ...message, status: "read" } : message;
+            array.push(newMessage);
             await AsyncStorage.setItem('chats', JSON.stringify(array));
             setchats(array);
-            socket.current?.emit('received', message);
-            setlastTimeStamp(`${message.content}${message.receiver}${message.sender}${message.timestamp}${Date.now()}`)
+            if (receiverId && receiverId===message.sender) {
+                socket.current?.emit('read', message);
+            } else {
+                socket.current?.emit('received', message);
+            }
         });
 
         socket.current.on('received', async (message: Chat) => {
@@ -133,7 +147,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <MyContexts.Provider value={{
-            user, setloading, setuser, url, users, chats, setchats, token, settoken, lastTimeStamp, socket, onlineUsers
+            user, setloading, setuser, url, users, chats, setchats, token, settoken, socket, onlineUsers
         }}>
             {children}
             {loading && <Loader />}
