@@ -138,7 +138,7 @@ const chats = () => {
                             <Text style={styles.title}>{getName()}</Text>
                             <Text style={{ color: status() ? "#0cc53e" : "#e73030" }}>{status() ? 'online' : 'offline'}</Text>
                         </View>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>router.push({ pathname: "/video-call", params: { email } })}>
                             <MaterialIcons name="video-call" size={30} />
                         </TouchableOpacity>
                     </View>
