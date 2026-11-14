@@ -3,7 +3,7 @@ import React from 'react'
 import Protected from '@/components/Protected'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useApp } from '@/global'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 
 const App = () => {
     const { email } = useLocalSearchParams();
@@ -19,18 +19,17 @@ const App = () => {
         router.back()
     }
 
-    const cameraFlip=()=>{
+    const cameraFlip = () => {
 
     }
 
     return (
         <Protected>
             <View style={styles.container}>
-                <Text style={styles.title}>Call with {getName()}</Text>
                 <View style={styles.bigScreen}>
                     <View style={styles.middleRow}>
                         <MaterialIcons name='call' color={'#0db128'} size={40} />
-                        <Text style={styles.title}>Calling...</Text>
+                        <Text style={styles.title}>Calling... to {getName()}</Text>
                     </View>
                 </View>
                 <View style={styles.bottomRow}>
@@ -75,12 +74,12 @@ const styles = StyleSheet.create({
     },
     bottomRow: {
         flexDirection: "row",
-        alignItems:"flex-end",
+        alignItems: "flex-end",
         position: 'absolute',
         bottom: 0,
         left: 0,
-        padding:10,
-        gap:20,
+        padding: 10,
+        gap: 20,
     },
     smallScreen: {
         backgroundColor: "#000",

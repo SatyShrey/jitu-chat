@@ -9,7 +9,7 @@ import SecureInput from '@/components/SecureInput';
 const Login = () => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
-  const { user, setloading, setuser, url, settoken } = useApp();
+  const { user, setloading, setuser, url, settoken,alert } = useApp();
   const [error, seterror] = useState('');
 
   const handleLogin = async () => {
@@ -21,7 +21,7 @@ const Login = () => {
       setuser(data.data.user);
       router.replace('/');
     })
-      .catch((error) => alert(error?.response?.data?.message || 'Something went wrong'))
+      .catch((error) => alert(error?.response?.data?.message || 'Something went wrong',"Error"))
       .finally(() => setloading(false))
   }
 

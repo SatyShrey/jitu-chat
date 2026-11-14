@@ -1,0 +1,71 @@
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+
+type Props = {
+    text: string,
+    task: () => void,
+    reset: () => void,
+    title?: string,
+}
+
+const ConfirmBox = ({ text, task, reset, title }: Props) => {
+    return (
+        <Modal transparent animationType='fade'>
+            <View style={styles.container}>
+                <View style={styles.card}>
+                    <Text style={styles.title}>{title || 'Confirm'}</Text>
+                    <Text style={styles.text}>{text}</Text>
+                    <View style={styles.row}>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: "#111" }]} onPress={reset}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: "#d31a1a" }]} onPress={() => { task(); reset() }}>
+                            <Text style={styles.buttonText}>Yes, Proceed</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View>
+        </Modal>
+    )
+}
+
+export default ConfirmBox
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#00000070"
+    },
+    card: {
+        padding: 10,
+        gap: 5,
+        borderRadius: 5,
+        backgroundColor: "#fff",
+        width: 400,
+        maxHeight: "90%"
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: "600"
+    },
+    text: {
+        fontSize: 16,
+        textAlign: 'center'
+    },
+    row: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        gap: 20,
+        marginTop: 20
+    },
+    button: {
+        padding: 10,
+        borderRadius: 5
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+})

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const App = () => {
-  const { user, setloading, url, token } = useApp();
+  const { user, setloading, url, token,alert } = useApp();
   const [email, setemail] = useState('')
   const [error, seterror] = useState('');
 

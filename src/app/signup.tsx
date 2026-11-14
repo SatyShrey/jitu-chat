@@ -10,7 +10,7 @@ const Signup = () => {
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
     const [name, setname] = useState('');
-    const { user, setloading, setuser, url } = useApp();
+    const { user, setloading, setuser, url ,alert} = useApp();
     const [error, seterror] = useState('');
     const [confirmPassword, setconfirmPassword] = useState('');
 
@@ -20,7 +20,7 @@ const Signup = () => {
         axios.post(url + '/signup', user).then(async (data) => {
             console.log(data.data);
             alert(data.data)
-        }).catch(err => alert(err?.response?.data?.message || err.message))
+        }).catch(err => alert(err?.response?.data?.message || err.message,"Error"))
             .finally(() => { setloading(false) })
     }
 

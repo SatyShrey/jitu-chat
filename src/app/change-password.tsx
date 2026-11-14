@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const App = () => {
-    const { user, setloading, url, token } = useApp();
+    const { user, setloading, url, token, alert } = useApp();
     const [currentPassword, setcurrentPassword] = useState('')
     const [newPassword, setnewPassword] = useState('');
     const [confirmPassword, setconfirmPassword] = useState('');
@@ -19,7 +19,7 @@ const App = () => {
                 alert(data.data.message)
             })
             .catch((err: any) => {
-                alert(err?.response?.data?.message || err.message)
+                alert(err?.response?.data?.message || err.message,"Error")
             })
             .finally(() => {
                 setloading(false)
@@ -30,7 +30,7 @@ const App = () => {
         seterror('');
         if (!currentPassword) return seterror('Enter Current Password')
         if (!newPassword) return seterror('Enter New Password')
-        if (newPassword==currentPassword) return seterror(`New password and current password can't be the same`)
+        if (newPassword == currentPassword) return seterror(`New password and current password can't be the same`)
         if (newPassword.length < 4) return seterror('New password must be at least 4 characters')
         if (newPassword != confirmPassword) return seterror('Confirm password not match')
         handleChange()

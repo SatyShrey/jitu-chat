@@ -4,6 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io, type Socket } from 'socket.io-client';
 import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
+import ConfirmBox from "./components/ConfirmBox";
+import AlertBox from "./components/AlertBox";
 
 type User = { name: string, email: string } | null;
 export type Chat = {
@@ -12,6 +14,15 @@ export type Chat = {
     content: string,
     timestamp: number,
     status: 'read' | 'sent' | 'received' | 'sending',
+}
+type ConfirmProp = {
+    text: string,
+    task: () => void,
+    title?: string,
+}
+type AlertProp = {
+    text: string,
+    title?: string,
 }
 type ContextValue = {
     user: User | null,
@@ -25,6 +36,8 @@ type ContextValue = {
     settoken: Dispatch<SetStateAction<string>>,
     socket: RefObject<Socket | null>,
     onlineUsers: string[],
+    setconfirmValue: Dispatch<SetStateAction<ConfirmProp | null>>,
+    alert: (text: string, title?: string) => void
 }
 
 const MyContexts = createContext<ContextValue | null>(null);
@@ -38,8 +51,13 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [chats, setchats] = useState<Chat[]>([]);
     const [onlineUsers, setonlineUsers] = useState<string[]>([]);
     const [token, settoken] = useState('');
+    const [confirmValue, setconfirmValue] = useState<ConfirmProp | null>(null);
+    const [alertValue, setalertValue] = useState<AlertProp | null>(null)
     const url = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
     const { email } = useLocalSearchParams();
+    const alert = (text: string, title?: string) => {
+        setalertValue({ text, title })
+    }
 
     const asyncFunction = async () => {
         const userString = await AsyncStorage.getItem('user');
@@ -86,7 +104,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
             array.push(newMessage);
             await AsyncStorage.setItem('chats', JSON.stringify(array));
             setchats(array);
-            if (receiverId && receiverId===message.sender) {
+            if (receiverId && receiverId === message.sender) {
                 socket.current?.emit('read', message);
             } else {
                 socket.current?.emit('received', message);
@@ -147,10 +165,25 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
 
     return (
         <MyContexts.Provider value={{
-            user, setloading, setuser, url, users, chats, setchats, token, settoken, socket, onlineUsers
+            user, setloading, setuser, alert, url, users, chats, setchats, token, settoken, socket, onlineUsers, setconfirmValue
         }}>
             {children}
             {loading && <Loader />}
+            {confirmValue &&
+                <ConfirmBox
+                    text={confirmValue.text}
+                    task={confirmValue.task}
+                    reset={() => { setconfirmValue(null) }}
+                    title={confirmValue.title}
+                />
+            }
+            {alertValue &&
+                <AlertBox
+                    text={alertValue.text}
+                    title={alertValue.title}
+                    reset={() => setalertValue(null)}
+                />
+            }
         </MyContexts.Provider>
     )
 }

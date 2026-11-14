@@ -8,23 +8,16 @@ import { router } from 'expo-router';
 
 const profile = () => {
 
-    const { user, setuser } = useApp();
+    const { user, setuser, setconfirmValue } = useApp();
     const logOut = async () => {
-        // Alert.alert('Logout', 'Are you sure you want to logout?', [
-        //     {
-        //         text: "Cancel", style: "cancel"
-        //     }, {
-        //         text: "Yes, Proceed", onPress: async () => {
-        //             await AsyncStorage.clear();
-        //             setuser(null);
-        //         }
-        //     }
-        // ])
-        const conf = confirm('Are you sure you want to logout?');
-        if (conf) {
-            await AsyncStorage.clear();
-            setuser(null);
-        }
+        setconfirmValue({
+            task: async () => {
+                await AsyncStorage.clear();
+                setuser(null);
+            },
+            text: "Are you sure you want to logout?",
+            title: "Logout"
+        })
     }
 
     return (
@@ -92,7 +85,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         width: '100%',
         elevation: 4,
-        backgroundColor: "#fff"
+        backgroundColor: "#ccc"
     },
     btnChangePasswordText: {
         color: '#000',
