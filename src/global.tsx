@@ -94,7 +94,7 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
 
         socket.current.on('online-users', async (onlineUsers) => {
             setonlineUsers(onlineUsers);
-        })
+        });
 
         socket.current.on('read', async (message: Chat) => {
             const existingData = await AsyncStorage.getItem('chats');
@@ -112,16 +112,13 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
             setonlineUsers(data);
         });
 
-        axios.get(url + '/users/' + user.email, { headers: { Authorization: `Bearer ${token}` } }).then(async (data) => {
-            await AsyncStorage.setItem('users', JSON.stringify(data.data));
-            setusers(data.data)
-        }).catch(e => alert(e.response?.data?.message || e.message))
-
-        axios.get(url + '/chats/' + user.email, { headers: { Authorization: `Bearer ${token}` } }).then(async (data) => {
+        axios.get(url + '/retrive-data/' + user.email, { headers: { Authorization: `Bearer ${token}` } }).then(async (data) => {
             const msgs = await AsyncStorage.getItem('chats');
             const array = msgs != null ? JSON.parse(msgs) : [];
-            const newArray = [...array, ...data.data];
+            const newArray = [...array, ...data.data.messages];
             await AsyncStorage.setItem('chats', JSON.stringify(newArray));
+            await AsyncStorage.setItem('users', JSON.stringify(data.data.users));
+            setusers(data.data.users)
             setchats(newArray)
         }).catch(e => alert(e.response?.data?.message || e.message))
 
@@ -130,11 +127,16 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [user])
 
+    if (!loaded) {
+        return null
+    }
+
     return (
         <MyContexts.Provider value={{
             user, setloading, setuser, url, users, chats, setchats, token, settoken, lastTimeStamp, socket, onlineUsers
         }}>
-            {children} {loading && <Loader />}
+            {children}
+            {loading && <Loader />}
         </MyContexts.Provider>
     )
 }

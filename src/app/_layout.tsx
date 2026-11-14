@@ -1,12 +1,21 @@
-import { StyleSheet } from 'react-native'
+import { StatusBar, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router';
 import { MyProvider } from '@/global';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const Layout = () => {
   return (
-    <MyProvider>
-      <Stack  screenOptions={{headerShown:false}} />
-    </MyProvider>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <StatusBar barStyle='dark-content' />
+        <MyProvider>
+          <Stack screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right"
+          }} />
+        </MyProvider>
+      </SafeAreaView>
+    </SafeAreaProvider>
   )
 }
 

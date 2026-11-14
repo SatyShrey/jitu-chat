@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Protected from '@/components/Protected'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
@@ -88,6 +88,12 @@ const chats = () => {
         }
         asyncFunction();
     }, [])
+    const getTime = (id: number) => {
+        const time = new Date(id);
+        // Forcing 'en-US' and 'UTC' guarantees the server and client output match exactly
+        return time.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: "2-digit" });
+    };
+
 
     if (!email) { return <Redirect href='/' /> }
 
@@ -96,22 +102,25 @@ const chats = () => {
             <View style={item.sender === user?.email ? styles.rightRow : styles.lfetRow}>
                 <View style={item.sender === user?.email ? styles.rightBubble : styles.leftBubble}>
                     <Text style={styles.text}>{item.content}</Text>
-                    {
-                        item.sender === user?.email && <>
-                            {
-                                item.status === 'read' && <Ionicons color={'#2bdf46'} name='checkmark-done' size={16} />
-                            }
-                            {
-                                item.status === 'sent' && <Ionicons color={'#ccc'} name='checkmark-outline' size={16} />
-                            }
-                            {
-                                item.status === 'received' && <Ionicons color={'#ccc'} name='checkmark-done' size={16} />
-                            }
-                            {
-                                item.status === 'sending' && <Ionicons color={'#ccc'} name='time-outline' size={16} />
-                            }
-                        </>
-                    }
+                    <Text style={styles.time}>{getTime(item.timestamp)}</Text>
+                    <View style={styles.check}>
+                        {
+                            item.sender === user?.email && <>
+                                {
+                                    item.status === 'read' && <Ionicons color={'#2bdf46'} name='checkmark-done' size={16} />
+                                }
+                                {
+                                    item.status === 'sent' && <Ionicons color={'#ccc'} name='checkmark-outline' size={16} />
+                                }
+                                {
+                                    item.status === 'received' && <Ionicons color={'#ccc'} name='checkmark-done' size={16} />
+                                }
+                                {
+                                    item.status === 'sending' && <Ionicons color={'#ccc'} name='time-outline' size={16} />
+                                }
+                            </>
+                        }
+                    </View>
                 </View>
             </View>
         )
@@ -119,34 +128,36 @@ const chats = () => {
 
     return (
         <Protected>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <View style={styles.profilePic}>
-                        <MaterialIcons name='person' size={30} />
+            <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={50} style={{ flex: 1 }}>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <View style={styles.profilePic}>
+                            <MaterialIcons name='person' size={30} />
+                        </View>
+                        <View style={styles.headerMiddle}>
+                            <Text style={styles.title}>{getName()}</Text>
+                            <Text style={{ color: status() ? "#0cc53e" : "#e73030" }}>{status() ? 'online' : 'offline'}</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <MaterialIcons name="video-call" size={30} />
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.headerMiddle}>
-                        <Text style={styles.title}>{getName()}</Text>
-                        <Text style={{ color: status() ? "#0cc53e" : "#e73030" }}>{status() ? 'online' : 'offline'}</Text>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        ref={flatRef}
+                        style={styles.messagesContainer}
+                        data={getMessages}
+                        keyExtractor={(item: Chat, index: number) => `${index}`}
+                        renderItem={renderItem}
+                    />
+                    <View style={styles.footer}>
+                        <TextInput style={styles.input} multiline value={text} onChangeText={settext} />
+                        {!!text && <TouchableOpacity onPress={sendMessage}>
+                            <MaterialIcons name='send' size={50} />
+                        </TouchableOpacity>}
                     </View>
-                    <TouchableOpacity>
-                        <MaterialIcons name="video-call" size={30} />
-                    </TouchableOpacity>
                 </View>
-                <FlatList
-                    showsVerticalScrollIndicator={false}
-                    ref={flatRef}
-                    style={styles.messagesContainer}
-                    data={getMessages}
-                    keyExtractor={(item: Chat, index: number) => `${index}`}
-                    renderItem={renderItem}
-                />
-                <View style={styles.footer}>
-                    <TextInput style={styles.input} multiline value={text} onChangeText={settext} />
-                    {!!text && <TouchableOpacity onPress={sendMessage}>
-                        <MaterialIcons name='send' size={50} />
-                    </TouchableOpacity>}
-                </View>
-            </View>
+            </KeyboardAvoidingView>
         </Protected>
     )
 }
@@ -187,21 +198,45 @@ const styles = StyleSheet.create({
     },
     lfetRow: {
         alignItems: 'flex-start',
-        margin: 2
+        marginHorizontal: 5,
+        marginVertical: 2
     },
     rightRow: {
         alignItems: "flex-end",
-        margin: 2
+        marginHorizontal: 5,
+        marginVertical: 2
     },
     leftBubble: {
-        padding: 10,
+        padding: 5,
         borderRadius: 5,
         backgroundColor: "#1b83d8",
+        maxWidth: "90%",
+        paddingBottom: 20,
+        position: 'relative',
+        minWidth: 60
     },
     rightBubble: {
-        padding: 10,
+        padding: 5,
         borderRadius: 5,
         backgroundColor: "#111",
+        flexDirection: "row",
+        alignItems: "flex-end",
+        maxWidth: "90%",
+        paddingBottom: 20,
+        position: "relative",
+        minWidth: 60
+    },
+    time: {
+        position: "absolute",
+        color: "#ccc",
+        fontSize: 10,
+        bottom: 3,
+        right: 5,
+    },
+    check: {
+        position: "absolute",
+        bottom: 15,
+        right: 5,
     },
     text: {
         color: '#fff',
@@ -221,8 +256,7 @@ const styles = StyleSheet.create({
         borderColor: "#ccc",
         borderWidth: 1,
         flex: 1,
-        paddingHorizontal: 12,
-        paddingVertical: 5,
+        padding: 12,
         fontSize: 18
     }
 })

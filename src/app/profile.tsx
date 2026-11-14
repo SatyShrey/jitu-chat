@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useApp } from '@/global'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,8 +10,21 @@ const profile = () => {
 
     const { user, setuser } = useApp();
     const logOut = async () => {
-        await AsyncStorage.clear();
-        setuser(null);
+        // Alert.alert('Logout', 'Are you sure you want to logout?', [
+        //     {
+        //         text: "Cancel", style: "cancel"
+        //     }, {
+        //         text: "Yes, Proceed", onPress: async () => {
+        //             await AsyncStorage.clear();
+        //             setuser(null);
+        //         }
+        //     }
+        // ])
+        const conf = confirm('Are you sure you want to logout?');
+        if (conf) {
+            await AsyncStorage.clear();
+            setuser(null);
+        }
     }
 
     return (
@@ -72,14 +85,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontStyle: "italic",
         fontWeight: "400",
-        color:"#3c3c3c"
+        color: "#3c3c3c"
     },
     btnChangePassword: {
         padding: 10,
         borderRadius: 12,
-        borderColor: '#222322',
         width: '100%',
-        borderWidth: 1
+        elevation: 4,
+        backgroundColor: "#fff"
     },
     btnChangePasswordText: {
         color: '#000',
@@ -91,6 +104,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         backgroundColor: '#df4545',
         width: '100%',
+        elevation: 4,
     },
     btnLogoutText: {
         color: '#ffffff',
