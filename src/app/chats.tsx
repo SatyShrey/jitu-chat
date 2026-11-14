@@ -11,7 +11,7 @@ const chats = () => {
     const [text, settext] = useState('');
     const { email } = useLocalSearchParams();
     const flatRef = useRef<FlatList>(null);
-    const { users, user, token, setchats, chats, url, socket, onlineUsers,alert } = useApp();
+    const { users, user, token, setchats, chats, url, socket, onlineUsers, alert } = useApp();
 
     function getName() {
         if (!email) return ''
@@ -72,7 +72,7 @@ const chats = () => {
             status: 'read'
         }
         socket.current?.emit('read', messages)
-    }, []);
+    }, [email, user]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -138,7 +138,7 @@ const chats = () => {
                             <Text style={styles.title}>{getName()}</Text>
                             <Text style={{ color: status() ? "#0cc53e" : "#e73030" }}>{status() ? 'online' : 'offline'}</Text>
                         </View>
-                        <TouchableOpacity onPress={()=>router.push({ pathname: "/video-call", params: { email } })}>
+                        <TouchableOpacity onPress={() => router.push({ pathname: "/video-call", params: { email } })}>
                             <MaterialIcons name="video-call" size={30} />
                         </TouchableOpacity>
                     </View>

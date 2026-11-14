@@ -104,10 +104,9 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
             array.push(newMessage);
             await AsyncStorage.setItem('chats', JSON.stringify(array));
             setchats(array);
+            socket.current?.emit('received', message);
             if (receiverId && receiverId === message.sender) {
                 socket.current?.emit('read', message);
-            } else {
-                socket.current?.emit('received', message);
             }
         });
 
