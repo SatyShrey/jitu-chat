@@ -21,7 +21,8 @@
       "package": "com.satya1997.mychat"
     },
     "web": {
-      "output": "server",
+      "bundler": "metro",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
