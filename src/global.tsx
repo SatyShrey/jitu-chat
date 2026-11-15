@@ -6,6 +6,7 @@ import axios from "axios";
 import { useLocalSearchParams } from "expo-router";
 import ConfirmBox from "./components/ConfirmBox";
 import AlertBox from "./components/AlertBox";
+import { Alert, BackHandler } from "react-native";
 
 type User = { name: string, email: string } | null;
 export type Chat = {
@@ -23,6 +24,8 @@ type ConfirmProp = {
 type AlertProp = {
     text: string,
     title?: string,
+    task?: () => void,
+    buttonText?: string,
 }
 type ContextValue = {
     user: User | null,
@@ -53,10 +56,11 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
     const [token, settoken] = useState('');
     const [confirmValue, setconfirmValue] = useState<ConfirmProp | null>(null);
     const [alertValue, setalertValue] = useState<AlertProp | null>(null)
-    const url = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+    const url = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.45:5000';
     const { email } = useLocalSearchParams();
-    const alert = (text: string, title?: string) => {
-        setalertValue({ text, title })
+
+    const alert = (text: string, title?: string, buttonText?: string, task?: () => void) => {
+        setalertValue({ text, title, buttonText, task })
     }
 
     const asyncFunction = async () => {
@@ -65,8 +69,18 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
         const user = userString != null ? JSON.parse(userString) : null;
         if (!user || !token) { return setloaded(true) };
         axios.get(url + '/user/', { headers: { Authorization: `Bearer ${token}` } }).then((data) => {
-            settoken(token); setuser(data.data);
-        }).catch((e) => { }).finally(() => setloaded(true))
+            settoken(token);
+            setuser(data.data);
+            setloaded(true);
+        }).catch((e) => {
+            if (e.message == "Network Error") {
+                return Alert.alert(e.message, "Please check your network connection.",[
+                    {text:"Retry",onPress:asyncFunction},
+                    {text:"Exit",onPress:BackHandler.exitApp}
+                ])
+            }
+            setloaded(true);
+        })
     }
 
     useEffect(() => {
@@ -180,6 +194,8 @@ export const MyProvider = ({ children }: { children: ReactNode }) => {
                 <AlertBox
                     text={alertValue.text}
                     title={alertValue.title}
+                    task={alertValue.task}
+                    buttonText={alertValue.buttonText}
                     reset={() => setalertValue(null)}
                 />
             }

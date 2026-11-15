@@ -28,8 +28,8 @@ const App = () => {
             <View style={styles.container}>
                 <View style={styles.bigScreen}>
                     <View style={styles.middleRow}>
-                        <MaterialIcons name='call' color={'#0db128'} size={40} />
-                        <Text style={styles.title}>Calling... to {getName()}</Text>
+                        <MaterialIcons name='call' color={'#0db128'} size={30} />
+                        <Text style={styles.title}>Calling to {getName()}</Text>
                     </View>
                 </View>
                 <View style={styles.bottomRow}>
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
         flex: 1
     },
     title: {
-        fontSize: 21,
-        fontWeight: "600",
+        fontSize: 16,
+        fontWeight: "500",
         textAlign: "center",
     },
     bigScreen: {

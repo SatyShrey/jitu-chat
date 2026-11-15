@@ -5,7 +5,7 @@ const Loader = () => {
     return (
         <Modal transparent>
             <View style={styles.container}>
-                <View>
+                <View style={styles.card}>
                     <ActivityIndicator />
                     <Text>Loading...</Text>
                 </View>

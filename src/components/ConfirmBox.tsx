@@ -1,3 +1,4 @@
+import { LinearGradient } from 'expo-linear-gradient'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 type Props = {
@@ -9,13 +10,13 @@ type Props = {
 
 const ConfirmBox = ({ text, task, reset, title }: Props) => {
     return (
-        <Modal transparent animationType='fade'>
-            <View style={styles.container}>
+        <Modal transparent animationType='slide' >
+            <LinearGradient style={{ flex: 1, justifyContent: "flex-end" }} colors={["#00000000", "#000"]}>
                 <View style={styles.card}>
                     <Text style={styles.title}>{title || 'Confirm'}</Text>
                     <Text style={styles.text}>{text}</Text>
                     <View style={styles.row}>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: "#111" }]} onPress={reset}>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: "#00000090" }]} onPress={reset}>
                             <Text style={styles.buttonText}>Cancel</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.button, { backgroundColor: "#d31a1a" }]} onPress={() => { task(); reset() }}>
@@ -23,7 +24,7 @@ const ConfirmBox = ({ text, task, reset, title }: Props) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </LinearGradient>
         </Modal>
     )
 }
@@ -31,26 +32,20 @@ const ConfirmBox = ({ text, task, reset, title }: Props) => {
 export default ConfirmBox
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#00000070",
-    },
     card: {
-        padding: 10,
+        paddingHorizontal: 10,
+        paddingVertical:20,
         gap: 5,
-        borderRadius: 5,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius:25,
         backgroundColor: "#fff",
-        width: 400,
-        maxWidth: "90%",
     },
     title: {
-        fontSize: 18,
+        fontSize: 25,
         fontWeight: "600"
     },
     text: {
-        fontSize: 16,
+        fontSize: 18,
         textAlign: 'center'
     },
     row: {
@@ -66,6 +61,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: 18,
+        fontWeight: "500"
     },
 })

@@ -9,7 +9,7 @@ import SecureInput from '@/components/SecureInput';
 const Login = () => {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
-  const { user, setloading, setuser, url, settoken,alert } = useApp();
+  const { user, setloading, setuser, url, settoken, alert } = useApp();
   const [error, seterror] = useState('');
 
   const handleLogin = async () => {
@@ -21,7 +21,7 @@ const Login = () => {
       setuser(data.data.user);
       router.replace('/');
     })
-      .catch((error) => alert(error?.response?.data?.message || 'Something went wrong',"Error"))
+      .catch((error) => alert(error?.response?.data?.message || error.message, "Error"))
       .finally(() => setloading(false))
   }
 
@@ -78,7 +78,6 @@ export default Login
 const styles = StyleSheet.create({
   container: {
     padding: 24,
-    backgroundColor: '#FFFFFF',
     gap: 10,
   },
   title: {
@@ -100,6 +99,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     color: '#171717',
+    backgroundColor: "#fff"
   },
   forgotPassword: {
     padding: 10,

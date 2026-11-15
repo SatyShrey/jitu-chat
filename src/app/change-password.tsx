@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 16,
         color: '#171717',
+        backgroundColor:"#fff"
     },
     error: {
         color: "#d93030",

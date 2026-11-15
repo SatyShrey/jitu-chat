@@ -85,7 +85,6 @@ export default Signup
 const styles = StyleSheet.create({
     container: {
         padding: 24,
-        backgroundColor: '#FFFFFF',
         gap: 10,
     },
     title: {
@@ -106,6 +105,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 16,
         color: '#171717',
+        backgroundColor:"#fff"
     },
     error: {
         color: "#d93030",

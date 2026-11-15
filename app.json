@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mychat",
-    "slug": "mychat",
+    "name": "jitu-chat",
+    "slug": "jitu-chat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mychat",
+    "scheme": "jitu-chat",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
@@ -18,7 +18,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.satya1997.mychat"
+      "package": "com.satya1997.jituchat"
     },
     "web": {
       "bundler": "metro",
@@ -26,6 +26,13 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-navigation-bar",
+        {
+          "enforceContrast": false,
+          "style": "light"
+        }
+      ],
       "expo-router",
       [
         "expo-splash-screen",
@@ -34,11 +41,31 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 76
         }
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ],
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "36912130-9c8d-4a1a-825e-b766f842831d"
+      }
     }
   }
 }

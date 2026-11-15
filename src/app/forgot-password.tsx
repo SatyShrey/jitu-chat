@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const App = () => {
-  const { user, setloading, url, token,alert } = useApp();
+  const { user, setloading, url, token, alert } = useApp();
   const [email, setemail] = useState('')
   const [error, seterror] = useState('');
 
@@ -32,7 +32,7 @@ const App = () => {
 
       <Text style={styles.error}>{error}</Text>
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text style={styles.buttonText}>Send reset link</Text>
       </TouchableOpacity>
     </View>
   )
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 16,
     color: '#171717',
+    backgroundColor: "#fff"
   },
   error: {
     color: "#d93030",

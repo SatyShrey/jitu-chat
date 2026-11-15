@@ -1,4 +1,4 @@
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useApp } from '@/global'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -31,12 +31,12 @@ const profile = () => {
                     <Text style={styles.email}>{user?.email}</Text>
                 </View>
                 <View style={styles.card}>
-                    <TouchableOpacity style={styles.btnChangePassword} onPress={() => router.push('/change-password')}>
-                        <Text style={styles.btnChangePasswordText}>Change password</Text>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: '#00000090', }]} onPress={() => router.push('/change-password')}>
+                        <Text style={styles.btnText}>Change password</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnLogout} onPress={logOut}>
-                        <Text style={styles.btnLogoutText}>Logout</Text>
-                    </TouchableOpacity>
+                    <Pressable style={[styles.btn, { backgroundColor: '#df4545', }]} onPress={logOut}>
+                        <Text style={styles.btnText}>Logout</Text>
+                    </Pressable>
                 </View>
             </ScrollView>
         </Protected>
@@ -51,24 +51,23 @@ const styles = StyleSheet.create({
     },
     card: {
         borderRadius: 12,
-        borderColor: "#ccc",
         padding: 10,
         width: 600,
         maxWidth: "90%",
-        borderWidth: 1,
         marginVertical: 10,
         marginHorizontal: "auto",
         alignItems: "center",
         gap: 10,
+        backgroundColor: "#fff",
+        elevation: 4
     },
     profilePic: {
         width: 100,
         height: 100,
         borderRadius: "50%",
-        borderColor: "#ccc",
-        borderWidth: 1,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#ccc"
     },
     name: {
         fontSize: 21,
@@ -80,26 +79,12 @@ const styles = StyleSheet.create({
         fontWeight: "400",
         color: "#3c3c3c"
     },
-    btnChangePassword: {
+    btn: {
         padding: 10,
-        borderRadius: 12,
+        borderRadius: 7,
         width: '100%',
-        elevation: 4,
-        backgroundColor: "#ccc"
     },
-    btnChangePasswordText: {
-        color: '#000',
-        textAlign: "center",
-        fontSize: 21
-    },
-    btnLogout: {
-        padding: 10,
-        borderRadius: 12,
-        backgroundColor: '#df4545',
-        width: '100%',
-        elevation: 4,
-    },
-    btnLogoutText: {
+    btnText: {
         color: '#ffffff',
         textAlign: "center",
         fontSize: 21

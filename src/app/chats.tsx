@@ -172,15 +172,14 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: "50%",
-        borderColor: "#ccc",
-        borderWidth: 1,
+        backgroundColor: "#9daccb",
         justifyContent: "center",
         alignItems: "center",
     },
     header: {
         padding: 5,
         borderColor: "#ccc",
-        borderBottomWidth: 1,
+        borderBottomWidth: 0.5,
         flexDirection: "row",
         gap: 10,
         alignItems: "center",
@@ -246,8 +245,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         padding: 5,
-        borderColor: "#ccc",
-        borderTopWidth: 1,
         gap: 10
     },
     input: {
